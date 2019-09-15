@@ -4,11 +4,12 @@
     <x:Property Name="Out_TransactionData" Type="OutArgument(sd:DataTable)" />
     <x:Property Name="In_Passwords" Type="InArgument(scg:Dictionary(x:String, ss:SecureString))" />
     <x:Property Name="Out_BrowserSkypeWeb" Type="OutArgument(ui:Browser)" />
+    <x:Property Name="Out_BrowserAWSLex" Type="OutArgument(ui:Browser)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
   </mva:VisualBasic.Settings>
-  <sap:VirtualizedContainerService.HintSize>408,978</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>570,1338</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>Initialization_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
@@ -62,29 +63,60 @@
       <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Description: Open and initialize application as needed.&#xA;&#xA;Pre Condition: N/A&#xA;Post Condtion: Applications opened" DisplayName="Initialization Sequence" sap:VirtualizedContainerService.HintSize="368,898" sap2010:WorkflowViewState.IdRef="Sequence_9">
+  <Sequence sap2010:Annotation.AnnotationText="Description: Open and initialize application as needed.&#xA;&#xA;Pre Condition: N/A&#xA;Post Condtion: Applications opened" DisplayName="Initialization Sequence" sap:VirtualizedContainerService.HintSize="530,1258" sap2010:WorkflowViewState.IdRef="Sequence_9">
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
         <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:LogMessage DisplayName="Log App Initialization message - Start" sap:VirtualizedContainerService.HintSize="330,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Start Sequence: Opening applications...&quot;]" />
-    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Skype_LoginWeb workflow" sap:VirtualizedContainerService.HintSize="330,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Skype_LoginWeb.xaml">
-      <ui:InvokeWorkflowFile.Arguments>
-        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="In_Config">[In_Config]</InArgument>
-        <OutArgument x:TypeArguments="ui:Browser" x:Key="Out_BrowserSkypeWeb">[Out_BrowserSkypeWeb]</OutArgument>
-        <InArgument x:TypeArguments="scg:Dictionary(x:String, ss:SecureString)" x:Key="In_Passwords">[In_Passwords]</InArgument>
-      </ui:InvokeWorkflowFile.Arguments>
-    </ui:InvokeWorkflowFile>
-    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Skype_StartChat workflow" sap:VirtualizedContainerService.HintSize="330,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Skype_StartChat.xaml">
-      <ui:InvokeWorkflowFile.Arguments>
-        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="In_Config">[In_Config]</InArgument>
-        <InArgument x:TypeArguments="ui:Browser" x:Key="In_BrowserSkypeWeb">[Out_BrowserSkypeWeb]</InArgument>
-      </ui:InvokeWorkflowFile.Arguments>
-    </ui:InvokeWorkflowFile>
-    <ui:LogMessage DisplayName="Log Message - Chatbot Application" sap:VirtualizedContainerService.HintSize="330,91" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Chabot Application: &quot; + In_Config(&quot;ChatbotApplication&quot;).ToString]" />
-    <ui:ReadRange AddHeaders="True" DataTable="[Out_TransactionData]" DisplayName="Read Range - Read Input Utterances" sap:VirtualizedContainerService.HintSize="330,87" sap2010:WorkflowViewState.IdRef="ReadRange_1" Range="A1" SheetName="[In_Config(&quot;ChatbotApplication&quot;).ToString + &quot;_&quot; + In_Config(&quot;Skype_ChatbotName&quot;).ToString]" WorkbookPath="[In_Config(&quot;UtterancesSourceFile&quot;).ToString]" />
-    <ui:LogMessage DisplayName="Log App Initialization message - Finished" sap:VirtualizedContainerService.HintSize="330,91" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;Finished Sequence: Opening applications...&quot;]" />
+    <ui:LogMessage DisplayName="Log App Initialization message - Start" sap:VirtualizedContainerService.HintSize="492,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Start Sequence: Opening applications...&quot;]" />
+    <ui:LogMessage DisplayName="Log Message - Chatbot Application" sap:VirtualizedContainerService.HintSize="492,91" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[&quot;Chabot Application: &quot; + In_Config(&quot;ChatbotApplication&quot;).ToString]" />
+    <ui:Delete ContinueOnError="True" DisplayName="Delete Chatbot Testing Output File" sap:VirtualizedContainerService.HintSize="492,22" sap2010:WorkflowViewState.IdRef="Delete_1" Path="[In_Config(&quot;ChatbotTestingOutputFile&quot;).ToString]" />
+    <Switch x:TypeArguments="x:String" DisplayName="Login based on Application" Expression="[In_Config(&quot;ChatbotApplication&quot;).ToString]" sap:VirtualizedContainerService.HintSize="492,639" sap2010:WorkflowViewState.IdRef="Switch`1_1">
+      <Sequence x:Key="Skype" DisplayName="Sequence - Login to Skype" sap:VirtualizedContainerService.HintSize="368,435" sap2010:WorkflowViewState.IdRef="Sequence_10">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Skype_LoginWeb workflow" sap:VirtualizedContainerService.HintSize="330,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Skype_LoginWeb.xaml">
+          <ui:InvokeWorkflowFile.Arguments>
+            <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="In_Config">[In_Config]</InArgument>
+            <OutArgument x:TypeArguments="ui:Browser" x:Key="Out_BrowserSkypeWeb">[Out_BrowserSkypeWeb]</OutArgument>
+            <InArgument x:TypeArguments="scg:Dictionary(x:String, ss:SecureString)" x:Key="In_Passwords">[In_Passwords]</InArgument>
+          </ui:InvokeWorkflowFile.Arguments>
+        </ui:InvokeWorkflowFile>
+        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Skype_StartChat workflow" sap:VirtualizedContainerService.HintSize="330,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Skype_StartChat.xaml">
+          <ui:InvokeWorkflowFile.Arguments>
+            <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="In_Config">[In_Config]</InArgument>
+            <InArgument x:TypeArguments="ui:Browser" x:Key="In_BrowserSkypeWeb">[Out_BrowserSkypeWeb]</InArgument>
+          </ui:InvokeWorkflowFile.Arguments>
+        </ui:InvokeWorkflowFile>
+        <ui:ReadRange AddHeaders="True" DataTable="[Out_TransactionData]" DisplayName="Read Range - Read Input Utterances" sap:VirtualizedContainerService.HintSize="330,87" sap2010:WorkflowViewState.IdRef="ReadRange_1" Range="A1" SheetName="[In_Config(&quot;ChatbotApplication&quot;).ToString + &quot;_&quot; + In_Config(&quot;Skype_ChatbotName&quot;).ToString]" WorkbookPath="[In_Config(&quot;UtterancesSourceFile&quot;).ToString]" />
+      </Sequence>
+      <Sequence x:Key="AWSLex" DisplayName="Sequence - Login to AWSLex" sap:VirtualizedContainerService.HintSize="368,433" sap2010:WorkflowViewState.IdRef="Sequence_11">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke AWSLex_Login workflow" sap:VirtualizedContainerService.HintSize="330,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="AWSLex_Login.xaml">
+          <ui:InvokeWorkflowFile.Arguments>
+            <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="In_Config">[in_Config]</InArgument>
+            <InArgument x:TypeArguments="scg:Dictionary(x:String, ss:SecureString)" x:Key="In_Passwords">[In_Passwords]</InArgument>
+            <OutArgument x:TypeArguments="ui:Browser" x:Key="Out_BrowserAWSLex">[Out_BrowserAWSLex]</OutArgument>
+          </ui:InvokeWorkflowFile.Arguments>
+        </ui:InvokeWorkflowFile>
+        <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke AWSLex_StartChat workflow" sap:VirtualizedContainerService.HintSize="330,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="AWSLex_StartChat.xaml">
+          <ui:InvokeWorkflowFile.Arguments>
+            <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="In_Config">[in_Config]</InArgument>
+            <InOutArgument x:TypeArguments="ui:Browser" x:Key="InOut_BrowserAWSLex">[Out_BrowserAWSLex]</InOutArgument>
+          </ui:InvokeWorkflowFile.Arguments>
+        </ui:InvokeWorkflowFile>
+        <ui:ReadRange AddHeaders="True" DataTable="[Out_TransactionData]" DisplayName="Read Range - Read Input Utterances" sap:VirtualizedContainerService.HintSize="330,87" sap2010:WorkflowViewState.IdRef="ReadRange_2" Range="A1" SheetName="[In_Config(&quot;ChatbotApplication&quot;).ToString + &quot;_&quot; + In_Config(&quot;AWSLex_ChatbotName&quot;).ToString]" WorkbookPath="[In_Config(&quot;UtterancesSourceFile&quot;).ToString]" />
+      </Sequence>
+    </Switch>
+    <ui:LogMessage DisplayName="Log App Initialization message - Finished" sap:VirtualizedContainerService.HintSize="492,91" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;Finished Sequence: Opening applications...&quot;]" />
   </Sequence>
 </Activity>

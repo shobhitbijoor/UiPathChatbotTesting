@@ -5,11 +5,12 @@
     <x:Property Name="In_BrowserSkypeWeb" Type="InArgument(ui:Browser)" />
     <x:Property Name="In_TransactionNumber" Type="InArgument(x:Int32)" />
     <x:Property Name="io_TransactionItem" Type="InOutArgument(sd:DataRow)" />
+    <x:Property Name="In_BrowserAWSLex" Type="InArgument(ui:Browser)" />
   </x:Members>
   <mva:VisualBasic.Settings>
     <x:Null />
   </mva:VisualBasic.Settings>
-  <sap:VirtualizedContainerService.HintSize>408,346</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>570,522</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>ProcessTransaction_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
@@ -61,20 +62,30 @@
       <AssemblyReference>UiPath.Mail</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Description: In this file all other process specific files will be invoked. If an application exception occurs, the current transaction can be retried. If a BRE is thrown, the transaction will be skipped. Can be a flowchart or sequence. " DisplayName="ProcessTransaction" sap:VirtualizedContainerService.HintSize="368,266" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="Description: In this file all other process specific files will be invoked. If an application exception occurs, the current transaction can be retried. If a BRE is thrown, the transaction will be skipped. Can be a flowchart or sequence. " DisplayName="ProcessTransaction" sap:VirtualizedContainerService.HintSize="530,442" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
         <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Skype_ChatbotTesting workflow" sap:VirtualizedContainerService.HintSize="330,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Skype_ChatbotTesting.xaml">
-      <ui:InvokeWorkflowFile.Arguments>
-        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="In_Config">[In_Config]</InArgument>
-        <InArgument x:TypeArguments="ui:Browser" x:Key="In_BrowserSkypeWeb">[In_BrowserSkypeWeb]</InArgument>
-        <InArgument x:TypeArguments="x:Int32" x:Key="In_TransactionNumber">[In_TransactionNumber]</InArgument>
-        <InOutArgument x:TypeArguments="sd:DataRow" x:Key="InOut_dtUtterancesRow">[io_TransactionItem]</InOutArgument>
-      </ui:InvokeWorkflowFile.Arguments>
-    </ui:InvokeWorkflowFile>
+    <Switch x:TypeArguments="x:String" DisplayName="Switch - Initiate Testing based on Chatbot Application" Expression="[In_Config(&quot;ChatbotApplication&quot;).ToString]" sap:VirtualizedContainerService.HintSize="492,293" sap2010:WorkflowViewState.IdRef="Switch`1_1">
+      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" x:Key="Skype" DisplayName="Invoke Skype_ChatbotTesting workflow" sap:VirtualizedContainerService.HintSize="330,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Skype_ChatbotTesting.xaml">
+        <ui:InvokeWorkflowFile.Arguments>
+          <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="In_Config">[In_Config]</InArgument>
+          <InArgument x:TypeArguments="ui:Browser" x:Key="In_BrowserSkypeWeb">[In_BrowserSkypeWeb]</InArgument>
+          <InArgument x:TypeArguments="x:Int32" x:Key="In_TransactionNumber">[In_TransactionNumber]</InArgument>
+          <InOutArgument x:TypeArguments="sd:DataRow" x:Key="InOut_dtUtterancesRow">[io_TransactionItem]</InOutArgument>
+        </ui:InvokeWorkflowFile.Arguments>
+      </ui:InvokeWorkflowFile>
+      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" x:Key="AWSLex" DisplayName="Invoke AWSLex_ChatbotTesting workflow" sap:VirtualizedContainerService.HintSize="330,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="AWSLex_ChatbotTesting.xaml">
+        <ui:InvokeWorkflowFile.Arguments>
+          <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="In_Config">[in_Config]</InArgument>
+          <InArgument x:TypeArguments="x:Int32" x:Key="In_TransactionNumber">[In_TransactionNumber]</InArgument>
+          <InArgument x:TypeArguments="sd:DataRow" x:Key="InOut_dtUtterancesRow">[io_TransactionItem]</InArgument>
+          <InOutArgument x:TypeArguments="ui:Browser" x:Key="InOut_BrowserAWSLex">[In_BrowserAWSLex]</InOutArgument>
+        </ui:InvokeWorkflowFile.Arguments>
+      </ui:InvokeWorkflowFile>
+    </Switch>
   </Sequence>
 </Activity>
